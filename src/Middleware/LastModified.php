@@ -17,6 +17,10 @@ class LastModified
     {
         $response = $next($request);
 
+        if (!config('last-modified.enable')) {
+            return $response;
+        }
+
         $lastModifiedTime = $this->getLastModified($response);
         $response->header('Last-Modified', $lastModifiedTime);
 

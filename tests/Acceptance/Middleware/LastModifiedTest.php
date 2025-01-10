@@ -18,6 +18,16 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_be_disabled(): void
+    {
+        config()->set('last-modified.enable', false);
+
+        $response = $this->get('fake');
+
+        $response->assertHeaderMissing('Last-Modified');
+    }
+
+    #[Test]
     public function it_should_add_the_last_modified_header(): void
     {
         $this->fakeRoute('fake');
