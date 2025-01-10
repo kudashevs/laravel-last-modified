@@ -57,6 +57,22 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_be_disabled(): void
+    {
+        config()->set('last-modified.enable', false);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince(time() + 5);
+
+        $response = $middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => new Response(),
+        );
+
+        $this->assertTrue($response->isOk());
+    }
+
+    #[Test]
     public function it_can_abort_aggressively(): void
     {
         config()->set('last-modified.aggressive', true);
