@@ -36,6 +36,10 @@ class LastModified
              * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-Modified-Since
              */
             if (strtotime($lastModifiedTime) <= strtotime($lastAccessTime)) {
+                if (config('last-modified.aggressive')) {
+                    abort(304);
+                }
+
                 $response->setStatusCode(304);
             }
         }

@@ -5,9 +5,10 @@ namespace Kudashevs\LaravelLastModified\Tests\Unit\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Kudashevs\LaravelLastModified\Middleware\LastModified;
+use Kudashevs\LaravelLastModified\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request as BaseRequest;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class LastModifiedTest extends TestCase
 {
@@ -53,6 +54,27 @@ class LastModifiedTest extends TestCase
 
         $this->assertSame(304, $response->getStatusCode());
         $this->assertTrue($response->headers->has('Last-Modified'));
+    }
+
+    #[Test]
+    public function it_can_abort_aggressively(): void
+    {
+        config()->set('last-modified.aggressive', true);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince(time());
+
+        try {
+            $middleware->handle(
+                $this->createRequest('get', '/', $requestTime),
+                fn() => new Response(),
+            );
+        } catch (\Throwable $exception) {
+            $this->assertEquals(
+                new HttpException(304, ''),
+                $exception
+            );
+        }
     }
 
     private function timeToIfModifiedSince(int $time): string
