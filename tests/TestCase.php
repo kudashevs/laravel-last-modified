@@ -16,4 +16,9 @@ class TestCase extends BaseTestCase
     {
         return ['Kudashevs\LaravelLastModified\Providers\LastModifiedServiceProvider'];
     }
+
+    protected function timeToIfModifiedSince(int $time): string
+    {
+        return date('D, d M Y H:i:s \G\M\T', $time);
+    }
 }

@@ -93,11 +93,6 @@ class LastModifiedTest extends TestCase
         }
     }
 
-    private function timeToIfModifiedSince(int $time): string
-    {
-        return date('D, d M Y H:i:s \G\M\T', $time);
-    }
-
     private function createRequest(string $method, string $uri, string $time): Request
     {
         $request = BaseRequest::create($uri, $method);
