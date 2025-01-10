@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request as BaseRequest;
 class LastModifiedTest extends TestCase
 {
     #[Test]
-    public function it_returns_ok_status_when_if_modified_since_is_in_the_past(): void
+    public function it_can_set_status_to_ok_when_if_modified_since_is_in_the_past(): void
     {
         $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time() - 5);
@@ -26,7 +26,7 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_not_modified_when_if_modified_since_is_in_the_present(): void
+    public function it_can_set_status_to_not_modified_when_if_modified_since_is_in_the_present(): void
     {
         $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time());
@@ -41,7 +41,7 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_not_modified_when_if_modified_since_is_in_the_future(): void
+    public function it_can_set_status_to_not_modified_when_if_modified_since_is_in_the_future(): void
     {
         $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time() + 5);
@@ -62,7 +62,7 @@ class LastModifiedTest extends TestCase
 
     private function createRequest(string $method, string $uri, string $time): Request
     {
-        $request = BaseRequest::create($method, $uri);
+        $request = BaseRequest::create($uri, $method);
         $request->headers->set('If-Modified-Since', $time);
 
         return Request::createFromBase($request);
