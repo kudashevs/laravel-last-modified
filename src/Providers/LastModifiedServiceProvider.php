@@ -13,7 +13,9 @@ class LastModifiedServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->publishes([
+            __DIR__ . '/../../config/last-modified.php' => config_path('last-modified.php'),
+        ], 'config');
     }
 
     /**
@@ -21,5 +23,6 @@ class LastModifiedServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->mergeConfigFrom(__DIR__ . '/../../config/last-modified.php', 'last-modified');
     }
 }
