@@ -8,6 +8,15 @@ use PHPUnit\Framework\Attributes\Test;
 
 class LastModifiedTest extends TestCase
 {
+    private const DEFAULT_FAKE_URL = '/fake';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->fakeRoute(self::DEFAULT_FAKE_URL);
+    }
+
     #[Test]
     public function it_should_add_the_last_modified_header(): void
     {
