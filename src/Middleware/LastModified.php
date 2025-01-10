@@ -49,7 +49,8 @@ final class LastModified
 
     private function shouldSkipProcessing(Request $request): bool
     {
-        return !config('last-modified.enable');
+        return !config('last-modified.enable')
+            || $request->hasHeader('If-None-Match');
     }
 
     /**

@@ -37,6 +37,22 @@ class LastModifiedTest extends TestCase
         $response->assertHeader('Last-Modified');
     }
 
+    #[Test]
+    public function it_should_ignore_if_an_if_none_match_header_is_present(): void
+    {
+        $this->fakeRoute('fake');
+
+        $response = $this->get(
+            'fake',
+            [
+                'If-None-Match' => '*',
+                'If-Modified-Since' => $this->timeToIfModifiedSince(time() + 1),
+            ],
+        );
+
+        $response->assertStatus(200);
+    }
+
     private function fakeRoute(string $route): void
     {
         \Illuminate\Support\Facades\Route::get($route, function () use ($route) {
