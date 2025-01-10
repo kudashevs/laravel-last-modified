@@ -22,7 +22,7 @@ class LastModifiedTest extends TestCase
     {
         config()->set('last-modified.enable', false);
 
-        $response = $this->get('fake');
+        $response = $this->get(self::DEFAULT_FAKE_URL);
 
         $response->assertHeaderMissing('Last-Modified');
     }
@@ -30,9 +30,7 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_add_the_last_modified_header(): void
     {
-        $this->fakeRoute('fake');
-
-        $response = $this->get('fake');
+        $response = $this->get(self::DEFAULT_FAKE_URL);
 
         $response->assertHeader('Last-Modified');
     }
@@ -40,7 +38,7 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_ignore_if_an_if_none_match_header_is_present(): void
     {
-        $this->fakeRoute('fake');
+        $this->fakeRoute(self::DEFAULT_FAKE_URL);
 
         $response = $this->get(
             'fake',
