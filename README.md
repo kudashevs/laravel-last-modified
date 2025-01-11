@@ -26,6 +26,18 @@ php artisan vendor:publish --provider="Kudashevs\LaravelLastModified\Providers\L
 ```
 
 
+## Configuration
+
+After [publishing](#installation), the configuration settings are located in the `config/last-modified.php` file.
+
+There configuration options are currently supported:
+```
+'enable'               # A boolean defines whether the middleware is enabled (default `true`).
+'aggressive'           # A boolean defines whether the middleware returns a response immediately (default is `false`).
+```
+, for more information please see the [configuration](config/last-modified.php) file.
+
+
 ## Testing
 
 ```bash
