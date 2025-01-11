@@ -108,7 +108,7 @@ class LastModifiedTest extends TestCase
 
     #[Test]
     #[DataProvider('provideIgnoredMethods')]
-    public function it_should_not_process_for_methods(string $method): void
+    public function it_should_not_process_for_ignored_methods(string $method): void
     {
         $response = $this->$method(
             self::DEFAULT_FAKE_URL,
