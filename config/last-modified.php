@@ -22,9 +22,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | Specifies whether the LastModified middleware acts aggressively. When it
-    | is, the middleware aborts any further execution and returns a response with
-    | a status code. When it is not, the middleware just sets the response status
-    | code and passes the response further down the chain.
+    | is, the middleware aborts any further execution and returns a response
+    | with a status code. When it is not, the middleware just sets the response
+    | status code and passes the response further down the chain.
     |
     */
 
