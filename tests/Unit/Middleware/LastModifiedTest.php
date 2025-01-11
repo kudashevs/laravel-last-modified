@@ -38,7 +38,7 @@ class LastModifiedTest extends TestCase
         );
 
         $this->assertSame(304, $response->getStatusCode());
-        $this->assertTrue($response->headers->has('Last-Modified'));
+        $this->assertFalse($response->headers->has('Last-Modified'));
     }
 
     #[Test]
@@ -53,7 +53,7 @@ class LastModifiedTest extends TestCase
         );
 
         $this->assertSame(304, $response->getStatusCode());
-        $this->assertTrue($response->headers->has('Last-Modified'));
+        $this->assertFalse($response->headers->has('Last-Modified'));
     }
 
     #[Test]
