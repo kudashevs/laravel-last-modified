@@ -1,6 +1,6 @@
 {
     "name": "kudashevs/laravel-last-modified",
-    "description": "A Laravel handler for the If-Modified-Since request and Last-Modified response headers.",
+    "description": "A Laravel middleware that handles the If-Modified-Since request and Last-Modified response headers.",
     "keywords": [
         "laravel",
         "If-Modified-Since",
