@@ -12,13 +12,21 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class LastModifiedTest extends TestCase
 {
+    private LastModified $middleware;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->middleware = new LastModified();
+    }
+
     #[Test]
     public function it_can_set_status_to_ok_when_if_modified_since_is_in_the_past(): void
     {
-        $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time() - 5);
 
-        $response = $middleware->handle(
+        $response = $this->middleware->handle(
             $this->createRequest('get', '/', $requestTime),
             fn() => new Response(),
         );
@@ -29,10 +37,9 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_can_set_status_to_not_modified_when_if_modified_since_is_in_the_present(): void
     {
-        $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time());
 
-        $response = $middleware->handle(
+        $response = $this->middleware->handle(
             $this->createRequest('get', '/', $requestTime),
             fn() => new Response(),
         );
@@ -44,10 +51,9 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_can_set_status_to_not_modified_when_if_modified_since_is_in_the_future(): void
     {
-        $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince(time() + 5);
 
-        $response = $middleware->handle(
+        $response = $this->middleware->handle(
             $this->createRequest('get', '/', $requestTime),
             fn() => new Response(),
         );
