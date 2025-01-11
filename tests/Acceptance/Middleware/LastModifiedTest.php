@@ -36,6 +36,40 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_should_process_an_if_modified_since_header_from_the_past(): void
+    {
+        $response = $this->get(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() - 1)],
+        );
+
+        $response->assertStatus(200);
+        $response->assertHeader('Last-Modified');
+    }
+
+    #[Test]
+    public function it_should_process_an_if_modified_since_header_from_the_present(): void
+    {
+        $response = $this->get(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time())],
+        );
+
+        $response->assertStatus(304);
+    }
+
+    #[Test]
+    public function it_should_process_an_if_modified_since_header_from_the_future(): void
+    {
+        $response = $this->get(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() + 1)],
+        );
+
+        $response->assertStatus(304);
+    }
+
+    #[Test]
     public function it_should_ignore_if_an_if_none_match_header_is_present(): void
     {
         $this->fakeRoute(self::DEFAULT_FAKE_URL);
