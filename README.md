@@ -20,6 +20,11 @@ protected $middleware = [
 ];
 ```
 
+You may also want to publish the configuration file (optional).
+```php
+php artisan vendor:publish --provider="Kudashevs\LaravelLastModified\Providers\LastModifiedServiceProvider"
+```
+
 
 ## Testing
 
