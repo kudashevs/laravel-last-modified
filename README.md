@@ -1,4 +1,8 @@
-# Laravel Last Modified ![test workflow](https://github.com/kudashevs/laravel-last-modified/actions/workflows/run-tests.yml/badge.svg)
+# Laravel Last Modified
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/kudashevs/laravel-last-modified.svg)](https://packagist.org/packages/kudashevs/laravel-last-modified)
+[![Run Tests](https://github.com/kudashevs/laravel-last-modified/actions/workflows/run-tests.yml/badge.svg)](https://github.com/kudashevs/laravel-last-modified/actions/workflows/run-tests.yml)
+[![License MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 This Laravel package contains a handler for the If-Modified-Since request and Last-Modified response headers. 
 
