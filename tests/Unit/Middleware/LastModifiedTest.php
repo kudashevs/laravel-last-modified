@@ -23,7 +23,7 @@ class LastModifiedTest extends TestCase
             fn() => new Response(),
         );
 
-        $this->assertTrue($response->isOk());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     #[Test]
@@ -69,7 +69,7 @@ class LastModifiedTest extends TestCase
             fn() => new Response(),
         );
 
-        $this->assertTrue($response->isOk());
+        $this->assertSame(200, $response->getStatusCode());
     }
 
     #[Test]
