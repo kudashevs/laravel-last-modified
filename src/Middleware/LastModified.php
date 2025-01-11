@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class LastModified
 {
-    private const IF_MODIFIED_SINCE_FORMAT = 'D, d M Y H:i:s \G\M\T';
+    private const IF_MODIFIED_SINCE_DATE_FORMAT = 'D, d M Y H:i:s \G\M\T';
 
     /**
      * Handle an incoming request.
@@ -63,7 +63,7 @@ final class LastModified
     {
         $lastModificationTimestamp = $this->retrieveLastModified($response);
 
-        return date(self::IF_MODIFIED_SINCE_FORMAT, $lastModificationTimestamp);
+        return date(self::IF_MODIFIED_SINCE_DATE_FORMAT, $lastModificationTimestamp);
     }
 
     /**
