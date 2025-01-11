@@ -10,6 +10,8 @@ final class LastModified
 {
     private const IF_MODIFIED_SINCE_DATE_FORMAT = 'D, d M Y H:i:s \G\M\T';
 
+    private const IF_MODIFIED_SINCE_ALLOWED_METHODS = ['GET', 'HEAD'];
+
     /**
      * Handle an incoming request.
      *
@@ -53,8 +55,26 @@ final class LastModified
 
     private function shouldSkipProcessing(Request $request): bool
     {
-        return !config('last-modified.enable')
-            || $request->hasHeader('If-None-Match');
+        if (config('last-modified.enable') === false) {
+            return true;
+        }
+
+        /*
+         * A recipient MUST ignore If-Modified-Since if the request contains an If-None-Match header field;
+         * See RFC 7232, Section 3.3.
+         */
+        if ($request->hasHeader('If-None-Match')) {
+            return true;
+        }
+
+        /*
+         * A recipient MUST ignore the If-Modified-Since header field if the received field-value is not a valid HTTP-date,
+         * or if the request method is neither GET nor HEAD. See RFC 7232, Section 3.3.
+         */
+        return !in_array(
+            $request->getMethod(),
+            self::IF_MODIFIED_SINCE_ALLOWED_METHODS,
+        );
     }
 
     /**

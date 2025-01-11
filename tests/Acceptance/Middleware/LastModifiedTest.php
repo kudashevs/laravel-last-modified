@@ -4,6 +4,7 @@ namespace Kudashevs\LaravelLastModified\Tests\Acceptance\Middleware;
 
 use Kudashevs\LaravelLastModified\Middleware\LastModified;
 use Kudashevs\LaravelLastModified\Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 class LastModifiedTest extends TestCase
@@ -85,9 +86,52 @@ class LastModifiedTest extends TestCase
         $response->assertStatus(200);
     }
 
+    #[Test]
+    #[DataProvider('provideAllowedMethods')]
+    public function it_should_process_for_allowed_methods(string $method): void
+    {
+        $response = $this->$method(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() + 5)],
+        );
+
+        $response->assertStatus(304);
+    }
+
+    public static function provideAllowedMethods(): array
+    {
+        return [
+            'GET method' => ['GET'],
+            'HEAD method' => ['HEAD'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('provideIgnoredMethods')]
+    public function it_should_not_process_for_methods(string $method): void
+    {
+        $response = $this->$method(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() + 5)],
+        );
+
+        $response->assertStatus(200);
+    }
+
+    public static function provideIgnoredMethods(): array
+    {
+        return [
+            'PUT method' => ['PUT'],
+            'POST method' => ['POST'],
+            'DELETE method' => ['DELETE'],
+            'PATCH method' => ['PATCH'],
+            'OPTIONS method' => ['OPTIONS'],
+        ];
+    }
+
     private function fakeRoute(string $route): void
     {
-        \Illuminate\Support\Facades\Route::get($route, function () use ($route) {
+        \Illuminate\Support\Facades\Route::any($route, function () use ($route) {
             return $route;
         })->middleware(LastModified::class);
     }
