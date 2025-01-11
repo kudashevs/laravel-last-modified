@@ -99,11 +99,59 @@ class LastModifiedTest extends TestCase
         }
     }
 
+    #[Test]
+    public function it_can_retrieve_from_view_cache(): void
+    {
+        $responseStub = $this->stubResponseForCache();
+        $expectedTime = filemtime(__DIR__);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
     private function createRequest(string $method, string $uri, string $time): Request
     {
         $request = BaseRequest::create($uri, $method);
         $request->headers->set('If-Modified-Since', $time);
 
         return Request::createFromBase($request);
+    }
+
+    private function stubResponseForCache(): Response
+    {
+        $response = new Response('', 200, []);
+        $response->original = new class {
+            public function getEngine(): object
+            {
+                return new class {
+                    public function getCompiler(): object
+                    {
+                        return new class {
+                            public function getCompiledPath(string $any): string
+                            {
+                                return __FILE__;
+                            }
+                        };
+                    }
+                };
+            }
+
+            public function getPath(): string
+            {
+                return __FILE__;
+            }
+        };
+
+        return $response;
     }
 }

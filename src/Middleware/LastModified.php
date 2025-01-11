@@ -112,6 +112,18 @@ final class LastModified
     {
         $timestamp = time();
 
+        if (
+            is_object($response?->original)
+            && is_object($response->original->getEngine()->getCompiler())
+            && file_exists(
+                $response->original->getEngine()->getCompiler()->getCompiledPath($response->original->getPath())
+            )
+        ) {
+            return (int)filemtime(
+                $response->original->getEngine()->getCompiler()->getCompiledPath($response->original->getPath())
+            );
+        }
+
         if (is_object($response->original) && method_exists($response->original, 'getPath')) {
             $timestamp = (int)filemtime($response->original->getPath());
         }
