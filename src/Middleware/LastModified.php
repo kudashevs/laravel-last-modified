@@ -110,8 +110,6 @@ final class LastModified
      */
     private function retrieveLastModified(Response $response): int
     {
-        $timestamp = time();
-
         if (
             is_object($response?->original)
             && is_object($response->original->getEngine()->getCompiler())
@@ -125,9 +123,9 @@ final class LastModified
         }
 
         if (is_object($response->original) && method_exists($response->original, 'getPath')) {
-            $timestamp = (int)filemtime($response->original->getPath());
+            return (int)filemtime($response->original->getPath());
         }
 
-        return $timestamp;
+        return time();
     }
 }
