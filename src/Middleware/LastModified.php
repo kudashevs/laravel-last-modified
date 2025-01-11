@@ -77,8 +77,8 @@ final class LastModified
         }
 
         /*
-         * A recipient MUST ignore the If-Modified-Since header field if the received field-value is not a valid HTTP-date,
-         * or if the request method is neither GET nor HEAD. See RFC 7232, Section 3.3.
+         * A recipient MUST ignore ..., or if the request method is neither GET nor HEAD.
+         * See RFC 7232, Section 3.3.
          */
         return !in_array(
             $request->getMethod(),
