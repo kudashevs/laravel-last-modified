@@ -87,6 +87,17 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_should_not_process_a_wrong_date(): void
+    {
+        $response = $this->get(
+            self::DEFAULT_FAKE_URL,
+            ['If-Modified-Since' => date('r', time() + 5)],
+        );
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
     #[DataProvider('provideAllowedMethods')]
     public function it_should_process_for_allowed_methods(string $method): void
     {

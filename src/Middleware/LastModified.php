@@ -3,6 +3,7 @@
 namespace Kudashevs\LaravelLastModified\Middleware;
 
 use Closure;
+use DateTime;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,14 @@ final class LastModified
 
         if ($request->headers->has('If-Modified-Since')) {
             $lastAccessTime = $request->headers->get('If-Modified-Since');
+
+            /*
+             * A recipient MUST ignore the If-Modified-Since header field if the received field-value is not a valid HTTP-date
+             * See RFC 7232, Section 3.3.
+             */
+            if (!$this->isValidHttpDate($lastAccessTime)) {
+                return $response;
+            }
 
             /*
              * The HTTP If-Modified-Since request header makes a request conditional. The server sends back the requested resource,
@@ -75,6 +84,13 @@ final class LastModified
             $request->getMethod(),
             self::IF_MODIFIED_SINCE_ALLOWED_METHODS,
         );
+    }
+
+    private function isValidHttpDate(string $date): bool
+    {
+        $converted = DateTime::createFromFormat(self::IF_MODIFIED_SINCE_DATE_FORMAT, $date);
+
+        return $converted && $converted->format(self::IF_MODIFIED_SINCE_DATE_FORMAT) === $date;
     }
 
     /**
