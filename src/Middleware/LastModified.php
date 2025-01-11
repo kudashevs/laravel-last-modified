@@ -75,7 +75,7 @@ final class LastModified
         $timestamp = time();
 
         if (is_object($response->original) && method_exists($response->original, 'getPath')) {
-            $timestamp = filemtime($response->original->getPath());
+            $timestamp = (int)filemtime($response->original->getPath());
         }
 
         return $timestamp;
