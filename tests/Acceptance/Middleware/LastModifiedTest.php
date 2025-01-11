@@ -75,7 +75,7 @@ class LastModifiedTest extends TestCase
         $this->fakeRoute(self::DEFAULT_FAKE_URL);
 
         $response = $this->get(
-            'fake',
+            self::DEFAULT_FAKE_URL,
             [
                 'If-None-Match' => '*',
                 'If-Modified-Since' => $this->timeToIfModifiedSince(time() + 1),
