@@ -187,28 +187,27 @@ class LastModifiedTest extends TestCase
 
     private function stubResponseWithAModel(): Response
     {
-        $response = new Response('', 200, []);
-        $response->original = new class {
-            public function getData(): array
-            {
-                $model = new class extends Model {
-                    public function getAttributes(): array
-                    {
-                        return [
-                            'created_at' => '2024-10-01 12:00:00',
-                            'updated_at' => '2024-12-01 12:00:00',
-                            'posted_at' => '2024-11-01 12:00:00',
-                        ];
-                    }
-                };
+        return $this->stubResponse(
+            new class {
+                public function getData(): array
+                {
+                    $model = new class extends Model {
+                        public function getAttributes(): array
+                        {
+                            return [
+                                'created_at' => '2024-10-01 12:00:00',
+                                'updated_at' => '2024-12-01 12:00:00',
+                                'posted_at' => '2024-11-01 12:00:00',
+                            ];
+                        }
+                    };
 
-                return [
-                    'test' => $model,
-                ];
+                    return [
+                        'test' => $model,
+                    ];
+                }
             }
-        };
-
-        return $response;
+        );
     }
 
     private function stubResponseWithACollection(): Response
@@ -261,6 +260,14 @@ class LastModifiedTest extends TestCase
                 return __FILE__;
             }
         };
+
+        return $response;
+    }
+
+    private function stubResponse(object $original): Response
+    {
+        $response = new Response('', 200, []);
+        $response->original = $original;
 
         return $response;
     }
