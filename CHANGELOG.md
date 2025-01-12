@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0 - 2025-01-12](https://github.com/kudashevs/laravel-last-modified/compare/v1.0.0...v1.1.0)
+
+- Add time retrieval from a first model
+- Add time retrieval from a first collection
+- Add time retrieval from a cached view
+- Add a `fallback` configuration option
+- Update README.md
+- Some improvements
+
+Note: this release requires the configuration to be republished (optional).
+
 ## 1.0.0 - 2025-01-11
 
 - Initial release
