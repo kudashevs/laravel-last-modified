@@ -157,6 +157,25 @@ class LastModifiedTest extends TestCase
         $this->assertSame(strtotime($lastModified), $expectedTime);
     }
 
+    #[Test]
+    public function it_can_retrieve_from_fallback(): void
+    {
+        $expectedTime = config('last-modified.fallback');
+        $responseStub = $this->stubResponseWithNothing();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
     private function createRequest(string $method, string $uri, string $time): Request
     {
         $request = BaseRequest::create($uri, $method);
@@ -241,6 +260,14 @@ class LastModifiedTest extends TestCase
                 return __FILE__;
             }
         };
+
+        return $response;
+    }
+
+    private function stubResponseWithNothing(): Response
+    {
+        $response = new Response('', 200, []);
+        $response->original = new \stdClass();
 
         return $response;
     }

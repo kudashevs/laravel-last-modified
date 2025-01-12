@@ -30,4 +30,18 @@ return [
 
     'aggressive' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Fallback
+    |--------------------------------------------------------------------------
+    |
+    | Specifies the fallback time fot the Last-Modifier header. Theoretically,
+    | this value will never be needed. But to guarantee a stable operation of
+    | the middleware, it is better to have it. The format is 'dd-mm-yyyy'.
+    |
+    | Note: don't forget to update it from time to time.
+    |
+    */
+
+    'fallback' => strtotime('01-01-2025 12:00:00'),
 ];

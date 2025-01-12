@@ -151,7 +151,7 @@ final class LastModified
         }
 
         // should never happen but who knows
-        return time();
+        return config('last-modified.fallback');
     }
 
     protected function isModel($entity): bool
