@@ -29,6 +29,8 @@ You may also want to publish the configuration file (optional).
 php artisan vendor:publish --provider="Kudashevs\LaravelLastModified\Providers\LastModifiedServiceProvider"
 ```
 
+After deploying your project, [check whether the headers are handled correctly](https://en.web-tool.org/check-last-modified/). 
+
 
 ## How it works
 
