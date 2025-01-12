@@ -120,6 +120,11 @@ final class LastModified
             if (method_exists($first, 'getAttributes')) {
                 return strtotime($first->getAttributes()['updated_at'] ?? 0);
             }
+
+            if ($this->isSupportedCollection(get_class($first))) {
+                $entity = $first->sortBy('updated_at')->first();
+                return strtotime($entity->getAttributes()['updated_at'] ?? 0);
+            }
         }
 
         if (
@@ -140,5 +145,18 @@ final class LastModified
         }
 
         return time();
+    }
+
+    private function isSupportedCollection(string $class): bool
+    {
+        $supportedClasses = [
+            \Illuminate\Support\Collection::class,
+            \Illuminate\Support\LazyCollection::class,
+            \Illuminate\Database\Eloquent\Collection::class,
+            \Illuminate\Pagination\Paginator::class,
+            \Illuminate\Pagination\LengthAwarePaginator::class,
+        ];
+
+        return in_array($class, $supportedClasses);
     }
 }
