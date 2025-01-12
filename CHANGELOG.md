@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1 - 2025-01-12](https://github.com/kudashevs/laravel-last-modified/compare/v1.1.0...v1.1.1)
+
+- Remove paginators from the supported collections
+
 ## [1.1.0 - 2025-01-12](https://github.com/kudashevs/laravel-last-modified/compare/v1.0.0...v1.1.0)
 
 - Add time retrieval from a first model
