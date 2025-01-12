@@ -128,7 +128,10 @@ final class LastModified
 
             if ($this->isCollection($first)) {
                 $entity = $first->sortBy('updated_at')->first();
-                if (array_key_exists('updated_at', $entity->getAttributes())) {
+                if (
+                    method_exists($entity, 'getAttributes')
+                    && array_key_exists('updated_at', $entity->getAttributes())
+                ) {
                     return strtotime($entity->getAttributes()['updated_at']);
                 }
             }
@@ -174,8 +177,6 @@ final class LastModified
             \Illuminate\Support\Collection::class,
             \Illuminate\Support\LazyCollection::class,
             \Illuminate\Database\Eloquent\Collection::class,
-            \Illuminate\Pagination\Paginator::class,
-            \Illuminate\Pagination\LengthAwarePaginator::class,
         ];
 
         return in_array($class, $supportedClasses);
