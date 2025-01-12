@@ -111,7 +111,7 @@ final class LastModified
     private function retrieveLastModified(Response $response): int
     {
         if (!is_object($response?->original)) {
-            return time();
+            return config('last-modified.fallback');
         }
 
         if ( // original response content has any data

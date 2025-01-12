@@ -25,7 +25,8 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_can_set_status_to_ok_when_if_modified_since_is_in_the_past(): void
     {
-        $requestTime = $this->timeToIfModifiedSince(time() - 5);
+        $lastAccessTime = config('last-modified.fallback');
+        $requestTime = $this->timeToIfModifiedSince($lastAccessTime - 5);
 
         $response = $this->middleware->handle(
             $this->createRequest('get', '/', $requestTime),

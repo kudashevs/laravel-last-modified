@@ -39,9 +39,11 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_process_an_if_modified_since_header_from_the_past(): void
     {
+        $lastAccessTime = config('last-modified.fallback');
+
         $response = $this->get(
             self::DEFAULT_FAKE_URL,
-            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() - 1)],
+            ['If-Modified-Since' => $this->timeToIfModifiedSince($lastAccessTime - 1)],
         );
 
         $response->assertStatus(200);
@@ -51,9 +53,11 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_process_an_if_modified_since_header_from_the_present(): void
     {
+        $lastAccessTime = config('last-modified.fallback');
+
         $response = $this->get(
             self::DEFAULT_FAKE_URL,
-            ['If-Modified-Since' => $this->timeToIfModifiedSince(time())],
+            ['If-Modified-Since' => $this->timeToIfModifiedSince($lastAccessTime)],
         );
 
         $response->assertStatus(304);
@@ -62,9 +66,11 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_process_an_if_modified_since_header_from_the_future(): void
     {
+        $lastAccessTime = config('last-modified.fallback');
+
         $response = $this->get(
             self::DEFAULT_FAKE_URL,
-            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() + 1)],
+            ['If-Modified-Since' => $this->timeToIfModifiedSince($lastAccessTime + 1)],
         );
 
         $response->assertStatus(304);
