@@ -110,41 +110,58 @@ final class LastModified
      */
     private function retrieveLastModified(Response $response): int
     {
-        if (
-            is_object($response?->original)
-            && method_exists($response->original, 'getData')
+        if (!is_object($response?->original)) {
+            return time();
+        }
+
+        if ( // original response content has any data
+            method_exists($response->original, 'getData')
             && count($response?->original->getData()) > 0
         ) {
             $first = current($response->original->getData());
 
-            if (method_exists($first, 'getAttributes')) {
+            if ($this->isModel($first)) {
                 return strtotime($first->getAttributes()['updated_at'] ?? 0);
             }
 
-            if ($this->isSupportedCollection(get_class($first))) {
+            if ($this->isCollection($first)) {
                 $entity = $first->sortBy('updated_at')->first();
                 return strtotime($entity->getAttributes()['updated_at'] ?? 0);
             }
         }
 
-        if (
-            is_object($response?->original)
+        if ( // original response content has no data
+            method_exists($response->original, 'getPath')
             && method_exists($response->original, 'getEngine')
             && is_object($response->original->getEngine()->getCompiler())
-            && file_exists(
-                $response->original->getEngine()->getCompiler()->getCompiledPath($response->original->getPath())
-            )
         ) {
-            return (int)filemtime(
-                $response->original->getEngine()->getCompiler()->getCompiledPath($response->original->getPath())
-            );
+            $compiler = $response->original->getEngine()->getCompiler();
+            $compiled = $compiler->getCompiledPath($response->original->getPath());
+
+            if (file_exists($compiled)) {
+                return (int)filemtime($compiled);
+            }
         }
 
-        if (is_object($response?->original) && method_exists($response->original, 'getPath')) {
+        if ( // no origins for the Last-Modified were found
+        method_exists($response->original, 'getPath')
+        ) {
+            // if nothing was found, use the template last modified date
             return (int)filemtime($response->original->getPath());
         }
 
+        // should never happen but who knows
         return time();
+    }
+
+    protected function isModel($entity): bool
+    {
+        return is_object($entity) && method_exists($entity, 'getAttributes');
+    }
+
+    protected function isCollection($entity): bool
+    {
+        return is_object($entity) && $this->isSupportedCollection(get_class($entity));
     }
 
     private function isSupportedCollection(string $class): bool
