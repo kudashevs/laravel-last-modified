@@ -135,6 +135,18 @@ final class LastModified
                     return strtotime($entity->getAttributes()['updated_at']);
                 }
             }
+
+            if ($this->isPaginator($first) && $first->isNotEmpty()) {
+                $items = collect($first->items());
+
+                $entity = $items->sortBy('updated_at')->first();
+                if (
+                    method_exists($entity, 'getAttributes')
+                    && array_key_exists('updated_at', $entity->getAttributes())
+                ) {
+                    return strtotime($entity->getAttributes()['updated_at']);
+                }
+            }
         }
 
         if ( // original response content has no data
@@ -169,6 +181,20 @@ final class LastModified
     protected function isCollection($entity): bool
     {
         return is_object($entity) && $this->isSupportedCollection(get_class($entity));
+    }
+
+    protected function isPaginator(object $entity): bool
+    {
+        /*
+         * @note it is possible to just check for implementing the \Illuminate\Contracts\Pagination\Paginator interface.
+         */
+        $supportedClasses = [
+            \Illuminate\Pagination\Paginator::class,
+            \Illuminate\Pagination\LengthAwarePaginator::class,
+            \Illuminate\Pagination\CursorPaginator::class,
+        ];
+
+        return is_object($entity) && in_array(get_class($entity), $supportedClasses);
     }
 
     private function isSupportedCollection(string $class): bool

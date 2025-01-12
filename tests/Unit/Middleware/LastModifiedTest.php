@@ -178,6 +178,44 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_retrieve_from_a_first_paginator_in_view_data(): void
+    {
+        $expectedTime = strtotime('2022-12-01 12:00:00');
+        $responseStub = $this->stubResponseWithAPaginator();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
+    public function it_can_retrieve_from_a_first_paginator_in_view_data_and_handle_an_empty_one(): void
+    {
+        $expectedTime = config('last-modified.fallback');
+        $responseStub = $this->stubResponseWithAnEmptyPaginator();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
     public function it_can_retrieve_from_view_cache(): void
     {
         $expectedTime = filemtime(__DIR__);
@@ -302,6 +340,55 @@ class LastModifiedTest extends TestCase
                 {
                     return [
                         'test' => collect([]),
+                    ];
+                }
+            }
+        );
+    }
+
+    private function stubResponseWithAPaginator(): Response
+    {
+        return $this->stubResponse(
+            new class {
+                public function getData(): array
+                {
+                    $mock = namedMock('Illuminate\Pagination\LengthAwarePaginator');
+                    $mock->shouldReceive('isNotEmpty')->andReturn(true);
+                    $mock->shouldReceive('items')
+                        ->andReturn([
+                            new class extends Model {
+                                public function getAttributes(): array
+                                {
+                                    return [
+                                        'created_at' => '2022-10-01 12:00:00',
+                                        'updated_at' => '2022-12-01 12:00:00',
+                                        'posted_at' => '2022-11-01 12:00:00',
+                                    ];
+                                }
+                            },
+                        ]);
+
+                    return [
+                        'test' => $mock,
+                    ];
+                }
+            }
+        );
+    }
+
+    private function stubResponseWithAnEmptyPaginator(): Response
+    {
+        return $this->stubResponse(
+            new class {
+                public function getData(): array
+                {
+                    $mock = namedMock('Illuminate\Pagination\LengthAwarePaginator');
+                    $mock->shouldReceive('isNotEmpty')->andReturn(false);
+                    $mock->shouldReceive('items')
+                        ->andReturn([]);
+
+                    return [
+                        'test' => $mock,
                     ];
                 }
             }
