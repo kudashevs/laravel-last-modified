@@ -30,6 +30,16 @@ php artisan vendor:publish --provider="Kudashevs\LaravelLastModified\Providers\L
 ```
 
 
+## How it works
+
+First, the middleware identifies the last modification time of a given url by parsing the request. It checks the following
+sources: - a first model in the view data, - a first collection in the view data, - a compiled view file, - a view file,
+- as a last resort, a fallback. When the last modification time has been identified, the middleware sets the Last-Modified
+response header.
+
+Then, it handles the `If-Modified-Since` request header using the data retrieved in the previous step.
+
+
 ## Configuration
 
 After [publishing](#installation), the configuration settings are located in the `config/last-modified.php` file.
