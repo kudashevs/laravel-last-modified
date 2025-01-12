@@ -121,6 +121,25 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_retrieve_from_a_first_model_in_view_data_and_handle_a_stampless_one(): void
+    {
+        $expectedTime = config('last-modified.fallback');
+        $responseStub = $this->stubResponseWithAStamplessModel();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
     public function it_can_retrieve_from_a_first_collection_in_view_data(): void
     {
         $expectedTime = strtotime('2023-12-01 12:00:00');
@@ -199,6 +218,27 @@ class LastModifiedTest extends TestCase
                                 'updated_at' => '2024-12-01 12:00:00',
                                 'posted_at' => '2024-11-01 12:00:00',
                             ];
+                        }
+                    };
+
+                    return [
+                        'test' => $model,
+                    ];
+                }
+            }
+        );
+    }
+
+    private function stubResponseWithAStamplessModel(): Response
+    {
+        return $this->stubResponse(
+            new class {
+                public function getData(): array
+                {
+                    $model = new class extends Model {
+                        public function getAttributes(): array
+                        {
+                            return [];
                         }
                     };
 
