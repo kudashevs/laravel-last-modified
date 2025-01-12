@@ -120,13 +120,13 @@ final class LastModified
         ) {
             $first = current($response->original->getData());
 
-            if ($this->isModel($first)) {
+            if ($this->isModel($first) && count($first->getAttributes()) > 0) {
                 if (array_key_exists('updated_at', $first->getAttributes())) {
                     return strtotime($first->getAttributes()['updated_at']);
                 }
             }
 
-            if ($this->isCollection($first)) {
+            if ($this->isCollection($first) && $first->count() > 0) {
                 $entity = $first->sortBy('updated_at')->first();
                 if (
                     method_exists($entity, 'getAttributes')
