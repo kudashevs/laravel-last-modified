@@ -121,12 +121,16 @@ final class LastModified
             $first = current($response->original->getData());
 
             if ($this->isModel($first)) {
-                return strtotime($first->getAttributes()['updated_at'] ?? 0);
+                if (array_key_exists('updated_at', $first->getAttributes())) {
+                    return strtotime($first->getAttributes()['updated_at']);
+                }
             }
 
             if ($this->isCollection($first)) {
                 $entity = $first->sortBy('updated_at')->first();
-                return strtotime($entity->getAttributes()['updated_at'] ?? 0);
+                if (array_key_exists('updated_at', $entity->getAttributes())) {
+                    return strtotime($entity->getAttributes()['updated_at']);
+                }
             }
         }
 
@@ -156,7 +160,7 @@ final class LastModified
 
     protected function isModel($entity): bool
     {
-        return is_object($entity) && method_exists($entity, 'getAttributes');
+        return is_object($entity) && is_a($entity, \Illuminate\Database\Eloquent\Model::class);
     }
 
     protected function isCollection($entity): bool
