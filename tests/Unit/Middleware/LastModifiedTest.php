@@ -100,15 +100,33 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
-    public function it_can_retrieve_from_view_cache(): void
+    public function it_can_retrieve_from_a_first_model_in_view_data(): void
     {
-        $responseStub = $this->stubResponseForCache();
-        $expectedTime = filemtime(__DIR__);
+        $expectedTime = strtotime('2024-12-01 12:00:00');
+        $responseStub = $this->stubResponseWithAModel();
 
-        $middleware = new LastModified();
         $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
 
-        $response = $middleware->handle(
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
+    public function it_can_retrieve_from_view_cache(): void
+    {
+        $expectedTime = filemtime(__DIR__);
+        $responseStub = $this->stubResponseFromCache();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
             $this->createRequest('get', '/', $requestTime),
             fn() => $responseStub,
         );
@@ -127,7 +145,33 @@ class LastModifiedTest extends TestCase
         return Request::createFromBase($request);
     }
 
-    private function stubResponseForCache(): Response
+    private function stubResponseWithAModel(): Response
+    {
+        $response = new Response('', 200, []);
+        $response->original = new class {
+            public function getData(): array
+            {
+                $model = new class {
+                    public function getAttributes(): array
+                    {
+                        return [
+                            'created_at' => '2024-10-01 12:00:00',
+                            'updated_at' => '2024-12-01 12:00:00',
+                            'posted_at' => '2024-11-01 12:00:00',
+                        ];
+                    }
+                };
+
+                return [
+                    'test' => $model,
+                ];
+            }
+        };
+
+        return $response;
+    }
+
+    private function stubResponseFromCache(): Response
     {
         $response = new Response('', 200, []);
         $response->original = new class {

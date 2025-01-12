@@ -112,6 +112,19 @@ final class LastModified
     {
         if (
             is_object($response?->original)
+            && method_exists($response->original, 'getData')
+            && count($response?->original->getData()) > 0
+        ) {
+            $first = current($response->original->getData());
+
+            if (method_exists($first, 'getAttributes')) {
+                return strtotime($first->getAttributes()['updated_at'] ?? 0);
+            }
+        }
+
+        if (
+            is_object($response?->original)
+            && method_exists($response->original, 'getEngine')
             && is_object($response->original->getEngine()->getCompiler())
             && file_exists(
                 $response->original->getEngine()->getCompiler()->getCompiledPath($response->original->getPath())
@@ -122,7 +135,7 @@ final class LastModified
             );
         }
 
-        if (is_object($response->original) && method_exists($response->original, 'getPath')) {
+        if (is_object($response?->original) && method_exists($response->original, 'getPath')) {
             return (int)filemtime($response->original->getPath());
         }
 
