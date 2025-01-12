@@ -159,6 +159,25 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_retrieve_from_a_first_collection_in_view_data_and_handle_an_empty_one(): void
+    {
+        $expectedTime = config('last-modified.fallback');
+        $responseStub = $this->stubResponseWithAnEmptyCollection();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
     public function it_can_retrieve_from_view_cache(): void
     {
         $expectedTime = filemtime(__DIR__);
@@ -269,6 +288,20 @@ class LastModifiedTest extends TestCase
 
                     return [
                         'test' => collect([$model]),
+                    ];
+                }
+            }
+        );
+    }
+
+    private function stubResponseWithAnEmptyCollection(): Response
+    {
+        return $this->stubResponse(
+            new class {
+                public function getData(): array
+                {
+                    return [
+                        'test' => collect([]),
                     ];
                 }
             }
