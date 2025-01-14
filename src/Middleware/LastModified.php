@@ -110,7 +110,7 @@ final class LastModified
      */
     private function retrieveLastModified(Response $response): int
     {
-        if (!is_object($response?->original)) {
+        if (!property_exists($response, 'original') || !is_object($response?->original)) {
             return config('last-modified.fallback');
         }
 
