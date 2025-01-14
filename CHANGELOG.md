@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0 - 2025-01-14](https://github.com/kudashevs/laravel-last-modified/compare/v1.1.1...v1.2.0)
+
+- Add the support for paginators
+- Update README.md
+
 ## [1.1.1 - 2025-01-12](https://github.com/kudashevs/laravel-last-modified/compare/v1.1.0...v1.1.1)
 
 - Remove paginators from the supported collections
