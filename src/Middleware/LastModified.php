@@ -22,7 +22,7 @@ final class LastModified
     {
         $response = $next($request);
 
-        if ($this->shouldSkipProcessing($request)) {
+        if ($this->shouldSkipProcessingRequest($request)) {
             return $response;
         }
 
@@ -66,7 +66,7 @@ final class LastModified
         return $response;
     }
 
-    private function shouldSkipProcessing(Request $request): bool
+    private function shouldSkipProcessingRequest(Request $request): bool
     {
         if (config('last-modified.enable') === false) {
             return true;
