@@ -193,7 +193,7 @@ final class LastModified
         return is_object($entity) && $this->isSupportedCollection(get_class($entity));
     }
 
-    protected function isPaginator(object $entity): bool
+    protected function isPaginator($entity): bool
     {
         /*
          * @note it is possible to just check for implementing the \Illuminate\Contracts\Pagination\Paginator interface.
