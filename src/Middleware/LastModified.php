@@ -26,7 +26,7 @@ final class LastModified
             return $response;
         }
 
-        if (!method_exists($response, 'header')) {
+        if ($this->shouldSkipProcessingResponse($response)) {
             return $response;
         }
 
@@ -88,6 +88,11 @@ final class LastModified
             $request->getMethod(),
             self::IF_MODIFIED_SINCE_ALLOWED_METHODS,
         );
+    }
+
+    private function shouldSkipProcessingResponse(Response $response): bool
+    {
+        return method_exists($response, 'header') === false;
     }
 
     private function isValidHttpDate(string $date): bool
