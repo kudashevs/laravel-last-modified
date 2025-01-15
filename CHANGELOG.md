@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1 - 2025-01-15](https://github.com/kudashevs/laravel-last-modified/compare/v1.2.0...v1.2.1)
+
+- Fix a bug related to different types of response
+- Some improvement
+
 ## [1.2.0 - 2025-01-14](https://github.com/kudashevs/laravel-last-modified/compare/v1.1.1...v1.2.0)
 
 - Add the support for paginators
