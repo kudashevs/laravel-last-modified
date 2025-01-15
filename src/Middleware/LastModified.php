@@ -22,11 +22,10 @@ final class LastModified
     {
         $response = $next($request);
 
-        if ($this->shouldSkipProcessingRequest($request)) {
-            return $response;
-        }
-
-        if ($this->shouldSkipProcessingResponse($response)) {
+        if (
+            $this->shouldSkipProcessingRequest($request)
+            || $this->shouldSkipProcessingResponse($response)
+        ) {
             return $response;
         }
 
