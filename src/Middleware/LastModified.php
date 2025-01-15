@@ -22,10 +22,7 @@ final class LastModified
     {
         $response = $next($request);
 
-        if (
-            $this->shouldSkipProcessingRequest($request)
-            || $this->shouldSkipProcessingResponse($response)
-        ) {
+        if ($this->shouldSkipProcessing($request, $response)) {
             return $response;
         }
 
@@ -65,7 +62,12 @@ final class LastModified
         return $response;
     }
 
-    private function shouldSkipProcessingRequest(Request $request): bool
+    private function shouldSkipProcessing(Request $request, Response $response): bool
+    {
+        return $this->shouldSkipRequest($request) || $this->shouldSkipResponse($response);
+    }
+
+    private function shouldSkipRequest(Request $request): bool
     {
         if (config('last-modified.enable') === false) {
             return true;
@@ -89,7 +91,7 @@ final class LastModified
         );
     }
 
-    private function shouldSkipProcessingResponse(Response $response): bool
+    private function shouldSkipResponse(Response $response): bool
     {
         return method_exists($response, 'header') === false;
     }
