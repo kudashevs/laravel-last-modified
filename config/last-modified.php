@@ -37,7 +37,7 @@ return [
     |
     | Specifies the fallback time fot the Last-Modifier header. This fallback is
     | used when a route does not use any view. Theoretically, this should happen
-    | rarely, but it is better to have it. The format is 'dd-mm-yyyy'.
+    | rarely, but it is better to have it. The format is 'dd-mm-yyyy h:i:s'.
     |
     | Note: don't forget to update it from time to time.
     |
