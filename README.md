@@ -49,7 +49,7 @@ There configuration options are currently supported:
 ```
 'enable'               # A boolean defines whether the middleware is enabled (default `true`).
 'aggressive'           # A boolean defines whether the middleware returns a response immediately (default is `false`).
-'fallback'             # A string defines the fallback time fot the Last-Modifier header.
+'fallback'             # An integer  the fallback timestamp for the Last-Modifier header.
 ```
 , for more information please see the [configuration](config/last-modified.php) file.
 
