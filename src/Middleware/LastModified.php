@@ -26,6 +26,10 @@ final class LastModified
             return $response;
         }
 
+        if (!method_exists($response, 'header')) {
+            return $response;
+        }
+
         $lastModifiedTime = $this->getLastModified($response);
         $response->header('Last-Modified', $lastModifiedTime);
 
