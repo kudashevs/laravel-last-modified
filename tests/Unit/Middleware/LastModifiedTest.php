@@ -434,7 +434,7 @@ class LastModifiedTest extends TestCase
     private function stubResponseWithNothing(): Response
     {
         $response = new Response('', 200, []);
-        $response->original = new \stdClass();
+        $response->original = null;
 
         return $response;
     }
