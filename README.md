@@ -34,11 +34,17 @@ After deploying your project, [check whether the headers are handled correctly](
 
 ## How it works
 
-First, the middleware identifies the last modification time of a given url by parsing the request. It checks the following
-origins: a first model in the view data, a first collection in the view data, a compiled view file, a view file, as a last
-resort, a fallback. When the last modification time has been identified, the middleware sets the `Last-Modified` response header.
+First, the middleware identifies the last modification time of a given url by parsing the request. It tries to retrieve
+this information from the possible origins in the following order (if it cannot retrieve the information, it moves forward):
+- a first model in the view data,
+- a first collection in the view data,
+- a first paginator in the view data,
+- a compiled view file,
+- a view file,
+- as a last, a fallback.
 
-Then, it handles the `If-Modified-Since` request header using the data retrieved in the previous step.
+After the last modification time has been retrieved, the middleware sets the `Last-Modified` response header. Then,
+it handles the `If-Modified-Since` request header using the last modification time from the previous step.
 
 
 ## Configuration
