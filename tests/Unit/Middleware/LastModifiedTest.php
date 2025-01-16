@@ -242,6 +242,27 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_can_retrieve_from_a_first_paginator_in_view_data_by_an_origin(): void
+    {
+        config()->set('last-modified.origins', ['posted_at']);
+
+        $expectedTime = strtotime('2022-11-01 12:00:00');
+        $responseStub = $this->provider->stubResponseWithAPaginator();
+
+        $requestTime = $this->timeToIfModifiedSince($expectedTime - 5);
+
+        $response = $this->middleware->handle(
+            $this->createRequest('get', '/', $requestTime),
+            fn() => $responseStub,
+        );
+
+        $lastModified = $response->headers->get('Last-Modified');
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertSame(strtotime($lastModified), $expectedTime);
+    }
+
+    #[Test]
     public function it_can_retrieve_from_a_first_paginator_in_view_data_and_handle_an_empty_one(): void
     {
         $expectedTime = config('last-modified.fallback');

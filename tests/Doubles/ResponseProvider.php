@@ -110,15 +110,31 @@ class ResponseProvider
                     $mock = namedMock('Illuminate\Pagination\LengthAwarePaginator');
                     $mock->shouldReceive('isNotEmpty')->andReturn(true);
                     $mock->shouldReceive('items')
-                        ->andReturn([
-                            (new class extends Model {
-                                protected $fillable = ['created_at', 'updated_at', 'posted_at'];
-                            })->make([
-                                'created_at' => '2022-10-01 12:00:00',
-                                'updated_at' => '2022-12-01 12:00:00',
-                                'posted_at' => '2022-11-01 12:00:00',
-                            ]),
-                        ]);
+                        ->andReturn(
+                            collect([
+                                (new class extends Model {
+                                    protected $fillable = ['created_at', 'updated_at', 'posted_at'];
+                                })->make([
+                                    'created_at' => '2020-10-01 12:00:00',
+                                    'updated_at' => '2020-12-01 12:00:00',
+                                    'posted_at' => '2020-11-01 12:00:00',
+                                ]),
+                                (new class extends Model {
+                                    protected $fillable = ['created_at', 'updated_at', 'posted_at'];
+                                })->make([
+                                    'created_at' => '2021-10-01 12:00:00',
+                                    'updated_at' => '2021-12-01 12:00:00',
+                                    'posted_at' => '2021-11-01 12:00:00',
+                                ]),
+                                (new class extends Model {
+                                    protected $fillable = ['created_at', 'updated_at', 'posted_at'];
+                                })->make([
+                                    'created_at' => '2022-10-01 12:00:00',
+                                    'updated_at' => '2022-12-01 12:00:00',
+                                    'posted_at' => '2022-11-01 12:00:00',
+                                ]),
+                            ])
+                        );
 
                     return [
                         'test' => $mock,
