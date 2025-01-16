@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0 - 2025-01-17](https://github.com/kudashevs/laravel-last-modified/compare/v1.2.1...v1.3.0)
+
+- Add the possibility to provide different origins
+- Update README.md
+- Some improvements
+
+Note: this release requires the configuration to be republished (optional).
+ 
 ## [1.2.1 - 2025-01-15](https://github.com/kudashevs/laravel-last-modified/compare/v1.2.0...v1.2.1)
 
 - Fix a bug related to different types of response
