@@ -44,4 +44,15 @@ return [
     */
 
     'fallback' => strtotime('01-01-2025 12:00:00'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Last-Modified origins
+    |--------------------------------------------------------------------------
+    |
+    | Specifies a list of origins where the middleware will look for time.
+    |
+    */
+
+    'origins' => [],
 ];

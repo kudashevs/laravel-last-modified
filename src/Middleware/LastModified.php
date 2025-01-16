@@ -13,6 +13,8 @@ final class LastModified
 
     private const IF_MODIFIED_SINCE_ALLOWED_METHODS = ['GET', 'HEAD'];
 
+    private const LAST_MODIFIED_DEFAULT_ORIGINS = ['updated_at'];
+
     /**
      * Handle an incoming request.
      *
@@ -124,6 +126,8 @@ final class LastModified
             return config('last-modified.fallback');
         }
 
+        $origins = $this->retrieveOrigins();
+
         if ( // original response content has any data
             method_exists($response->original, 'getData')
             && count($response?->original->getData()) > 0
@@ -131,8 +135,10 @@ final class LastModified
             $first = current($response->original->getData());
 
             if ($this->isModel($first) && count($first->getAttributes()) > 0) {
-                if (array_key_exists('updated_at', $first->getAttributes())) {
-                    return strtotime($first->getAttributes()['updated_at']);
+                foreach ($origins as $origin) {
+                    if (array_key_exists($origin, $first->getAttributes())) {
+                        return strtotime($first->getAttributes()[$origin]);
+                    }
                 }
             }
 
@@ -181,6 +187,13 @@ final class LastModified
 
         // should never happen but who knows
         return config('last-modified.fallback');
+    }
+
+    protected function retrieveOrigins(): array
+    {
+        $originsFromConfig = config('last-modified.origins', []);
+
+        return array_merge($originsFromConfig, self::LAST_MODIFIED_DEFAULT_ORIGINS);
     }
 
     protected function isModel($entity): bool
