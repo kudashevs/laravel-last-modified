@@ -143,12 +143,16 @@ final class LastModified
             }
 
             if ($this->isCollection($first) && $first->count() > 0) {
-                $entity = $first->sortBy('updated_at')->first();
+                $entity = $first->sortByDesc($origins)->first();
                 if (
                     method_exists($entity, 'getAttributes')
                     && array_key_exists('updated_at', $entity->getAttributes())
                 ) {
-                    return strtotime($entity->getAttributes()['updated_at']);
+                    foreach ($origins as $origin) {
+                        if (array_key_exists($origin, $entity->getAttributes())) {
+                            return strtotime($entity->getAttributes()[$origin]);
+                        }
+                    }
                 }
             }
 

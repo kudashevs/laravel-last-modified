@@ -63,8 +63,24 @@ class ResponseProvider
                         'posted_at' => '2021-11-01 12:00:00',
                     ]);
 
+                    $second = (new class extends Model {
+                        protected $fillable = ['created_at', 'updated_at', 'posted_at'];
+                    })->make([
+                        'created_at' => '2022-10-01 12:00:00',
+                        'updated_at' => '2022-12-01 12:00:00',
+                        'posted_at' => '2022-11-01 12:00:00',
+                    ]);
+
+                    $third = (new class extends Model {
+                        protected $fillable = ['created_at', 'updated_at', 'posted_at'];
+                    })->make([
+                        'created_at' => '2023-10-01 12:00:00',
+                        'updated_at' => '2023-12-01 12:00:00',
+                        'posted_at' => '2023-11-01 12:00:00',
+                    ]);
+
                     return [
-                        'test' => collect([$first]),
+                        'test' => collect([$first, $second, $third]),
                     ];
                 }
             }
