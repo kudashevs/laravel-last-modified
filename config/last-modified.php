@@ -50,7 +50,9 @@ return [
     | Last-Modified origins
     |--------------------------------------------------------------------------
     |
-    | Specifies a list of origins where the middleware will look for time.
+    | Specifies a list of origins where the middleware will look for the last
+    | modification time of a page. By default, the middleware is going to use
+    | the 'updated_at' attribute only.
     |
     */
 
