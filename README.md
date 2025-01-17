@@ -35,7 +35,7 @@ After deploying your project, [check whether the headers are handled correctly](
 ## How it works
 
 First, the middleware identifies the last modification time of a given url by parsing the request. It tries to retrieve
-this information from the possible origins in the following order (if it cannot retrieve the information, it moves forward):
+this information from possible origins in the following order (if it cannot retrieve the information, it moves forward):
 - a first model in the view data,
 - a first collection in the view data,
 - a first paginator in the view data,
