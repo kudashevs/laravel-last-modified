@@ -41,7 +41,7 @@ this information from the possible origins in the following order (if it cannot 
 - a first paginator in the view data,
 - a compiled view file,
 - a view file,
-- as a last, a fallback.
+- as a last resort, a fallback.
 
 After the last modification time has been retrieved, the middleware sets the `Last-Modified` response header. Then,
 it handles the `If-Modified-Since` request header using the last modification time from the previous step.
