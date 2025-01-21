@@ -77,6 +77,20 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
+    public function it_should_exclude_a_url(): void
+    {
+        config()->set('last-modified.exclude', ['/test/*']);
+        $this->fakeRoute('/test/exclude');
+
+        $response = $this->get(
+            '/test/exclude',
+            ['If-Modified-Since' => $this->timeToIfModifiedSince(time() + 1)],
+        );
+
+        $response->assertStatus(200);
+    }
+
+    #[Test]
     public function it_should_ignore_if_an_if_none_match_header_is_present(): void
     {
         $response = $this->get(

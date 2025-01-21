@@ -83,6 +83,56 @@ class LastModifiedTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
     }
 
+
+    #[Test]
+    public function it_can_exclude_a_simple_path(): void
+    {
+        config()->set('last-modified.exclude', ['/test']);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince(time() + 5);
+
+        $response = $middleware->handle(
+            $this->createRequest('get', '/test', $requestTime),
+            fn() => new Response(),
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    #[Test]
+    public function it_can_exclude_a_nested_path(): void
+    {
+        config()->set('last-modified.exclude', ['/test/*']);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince(time() + 5);
+
+        $response = $middleware->handle(
+            $this->createRequest('get', '/test/exclude', $requestTime),
+            fn() => new Response(),
+        );
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
+
+    #[Test]
+    public function it_can_exclude_an_overlap_path(): void
+    {
+        config()->set('last-modified.exclude', ['/test']);
+
+        $middleware = new LastModified();
+        $requestTime = $this->timeToIfModifiedSince(time() + 5);
+
+        $response = $middleware->handle(
+            $this->createRequest('get', '/excluded/test', $requestTime),
+            fn() => new Response(),
+        );
+
+        $this->assertSame(304, $response->getStatusCode());
+    }
+
+
     #[Test]
     public function it_can_abort_aggressively(): void
     {

@@ -75,6 +75,10 @@ final class LastModified
             return true;
         }
 
+        if ($this->isPathExcluded($request->path())) {
+            return true;
+        }
+
         /*
          * A recipient MUST ignore If-Modified-Since if the request contains an If-None-Match header field;
          * See RFC 7232, Section 3.3.
@@ -91,6 +95,15 @@ final class LastModified
             $request->getMethod(),
             self::IF_MODIFIED_SINCE_ALLOWED_METHODS,
         );
+    }
+
+    private function isPathExcluded(string $path): bool
+    {
+        $excluded = array_map(function ($exclude) {
+            return ltrim($exclude, '/');
+        }, config('last-modified.exclude', []));
+
+        return str($path)->is($excluded);
     }
 
     private function shouldSkipResponse(Response $response): bool

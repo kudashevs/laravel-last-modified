@@ -57,4 +57,18 @@ return [
     */
 
     'origins' => [],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exclude paths
+    |--------------------------------------------------------------------------
+    |
+    | Specifies a list of paths to be excluded from processing. By default, this
+    | list is empty, which means that all URLS will be handled by the middleware.
+    | If your application requires some of the paths to be excluded, add them to
+    | the list. It accepts asterisks as wildcard values.
+    |
+    */
+
+    'exclude' => [],
 ];

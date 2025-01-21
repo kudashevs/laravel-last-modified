@@ -57,6 +57,7 @@ There configuration options are currently supported:
 'aggressive'           # A boolean defines whether the middleware returns a response immediately (default is `false`).
 'fallback'             # An integer the fallback timestamp for the Last-Modifier header.
 'origins'              # An array with a list of origins of the last modification time.
+'exclude'              # An array with a list of paths to be excluded from processing.
 ```
 , for more information please see the [configuration](config/last-modified.php) file.
 
