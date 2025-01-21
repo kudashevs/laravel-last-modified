@@ -79,8 +79,6 @@ class LastModifiedTest extends TestCase
     #[Test]
     public function it_should_ignore_if_an_if_none_match_header_is_present(): void
     {
-        $this->fakeRoute(self::DEFAULT_FAKE_URL);
-
         $response = $this->get(
             self::DEFAULT_FAKE_URL,
             [
