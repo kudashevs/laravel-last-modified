@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0 - 2025-01-21](https://github.com/kudashevs/laravel-last-modified/compare/v1.3.0...v1.4.0)
+
+- Add the paths exclusion (closes #2)
+- Update README.md
+
+Note: this release requires the config file to be updated with the new exclude configuration option (optional).
+
 ## [1.3.0 - 2025-01-17](https://github.com/kudashevs/laravel-last-modified/compare/v1.2.1...v1.3.0)
 
 - Add the possibility to provide different origins
