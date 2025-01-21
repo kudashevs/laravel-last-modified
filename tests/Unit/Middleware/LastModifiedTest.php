@@ -117,7 +117,7 @@ class LastModifiedTest extends TestCase
     }
 
     #[Test]
-    public function it_can_exclude_an_overlap_path(): void
+    public function it_cannot_exclude_an_overlapped_path(): void
     {
         config()->set('last-modified.exclude', ['/test']);
 
