@@ -1,12 +1,12 @@
 <?php
 
-namespace Kudashevs\LaravelLastModified\Tests\Bugs;
+namespace Kudashevs\LaravelLastModified\Tests\Regression\Middleware;
 
 use Kudashevs\LaravelLastModified\Middleware\LastModified;
 use Kudashevs\LaravelLastModified\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class CaughtBugsTest extends TestCase
+class LastModifiedTest extends TestCase
 {
     #[Test]
     public function it_can_handle_a_bug_in_the_retrieve_acceptable_languages_intersection(): void
