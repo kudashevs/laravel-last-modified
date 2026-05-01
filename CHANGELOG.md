@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0 - 2026-05-01](https://github.com/kudashevs/laravel-last-modified/compare/v1.4.0...v2.0.0)
+
+- Add support for PHP 8.5
+- Increase the minimum Laravel version to 12.0
+- Increase the minimum PHP version to 8.2
+- Increase the minimum PHPUnit version to 11.0
+- Add PHPStan static analysis
+- Some improvements
+
 ## [1.4.0 - 2025-01-21](https://github.com/kudashevs/laravel-last-modified/compare/v1.3.0...v1.4.0)
 
 - Add the paths exclusion (closes #2)
