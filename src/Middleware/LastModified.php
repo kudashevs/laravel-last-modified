@@ -135,7 +135,10 @@ final class LastModified
      */
     private function retrieveLastModified(Response $response): int
     {
-        if (!property_exists($response, 'original') || !is_object($response?->original)) {
+        if (
+            !property_exists($response, 'original')
+            || !is_object($response->original)
+        ) {
             return config('last-modified.fallback');
         }
 
@@ -143,7 +146,7 @@ final class LastModified
 
         if ( // original response content has any data
             method_exists($response->original, 'getData')
-            && count($response?->original->getData()) > 0
+            && count($response->original->getData()) > 0
         ) {
             $first = current($response->original->getData());
 
