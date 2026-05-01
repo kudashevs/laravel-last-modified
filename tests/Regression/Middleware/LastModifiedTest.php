@@ -25,7 +25,7 @@ class LastModifiedTest extends TestCase
 
     private function fakeFileResponse(string $route): void
     {
-        \Illuminate\Support\Facades\Route::get($route, function () use ($route) {
+        \Illuminate\Support\Facades\Route::get($route, function () {
             return response()->file(__FILE__, ['Content-Type' => 'text/txt']);
         })->middleware(LastModified::class);
     }
