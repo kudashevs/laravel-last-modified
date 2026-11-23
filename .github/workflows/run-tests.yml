@@ -19,6 +19,7 @@ jobs:
         include:
           - laravel: 12.*
             testbench: 10.*
+            min-laravel: "12.0.0"
           - laravel: 13.*
             testbench: 11.*
             min-laravel: "13.30.0"
@@ -51,6 +52,18 @@ jobs:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ matrix.stability }}-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ matrix.stability }}-
+
+      - name: Set Laravel & Testbench versions
+        run: |
+          if [ "${{ matrix.stability }}" = "prefer-lowest" ] && [ -n "${{ matrix.min-laravel }}" ]; then
+            LARAVEL_VERSION="^${{ matrix.min-laravel }}"
+          else
+            LARAVEL_VERSION="${{ matrix.laravel }}"
+          fi
+          composer require \
+            "laravel/framework:${LARAVEL_VERSION}" \
+            "orchestra/testbench:${{ matrix.testbench }}" \
+            --no-interaction --no-update
 
       - name: Install dependencies
         run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
