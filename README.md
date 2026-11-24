@@ -2,7 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kudashevs/laravel-last-modified.svg)](https://packagist.org/packages/kudashevs/laravel-last-modified)
 [![Run Tests](https://github.com/kudashevs/laravel-last-modified/actions/workflows/run-tests.yml/badge.svg)](https://github.com/kudashevs/laravel-last-modified/actions/workflows/run-tests.yml)
-[![License MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
+[![License MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 This Laravel package contains a handler for the If-Modified-Since request and Last-Modified response headers. 
 
@@ -84,4 +84,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 
-The MIT License (MIT). Please see the [License file](LICENSE.md) for more information.
+The MIT License (MIT). Please see the [License file](LICENSE) for more information.
